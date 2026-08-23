@@ -89,6 +89,9 @@ export const metadata = {
     apple: "/apple-icon.svg",
     shortcut: "/favicon.svg",
   },
+  verification: {
+    google: "GcVTmztjN4uL5vShst7rb0s4sbtCDqMnVrYrXC1Re00",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -129,6 +132,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl" className={`${ibmPlexSansArabic.className} ${notoSansArabic.className}`}>
       <head>
+        <meta name="google-site-verification" content="GcVTmztjN4uL5vShst7rb0s4sbtCDqMnVrYrXC1Re00" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="apple-touch-icon" href="/apple-icon.svg" />
         <script
