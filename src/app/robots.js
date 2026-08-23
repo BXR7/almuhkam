@@ -5,6 +5,6 @@ export default function robots() {
       allow: "/",
       disallow: ["/admin/", "/admin/*", "/api/", "/_next/"],
     },
-    sitemap: "https://almuhkam.com/sitemap.xml",
+    sitemap: "https://aljalal.com/sitemap.xml",
   };
 }

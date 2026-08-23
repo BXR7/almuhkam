@@ -23,7 +23,7 @@ export const viewport = {
 };
 
 export const metadata = {
-  metadataBase: new URL('https://almuhkam.com'),
+  metadataBase: new URL('https://aljalal.com'),
   title: {
     default: "الجلال — منصة التدقيق اللغوي والتحرير الأكاديمي",
     template: "%s | الجلال"
@@ -42,7 +42,7 @@ export const metadata = {
     "تدقيق لغوي السعودية والخليج",
     "منصة الجلال"
   ],
-  authors: [{ name: "منصة الجلال للتدقيق اللغوي", url: "https://almuhkam.com" }],
+  authors: [{ name: "منصة الجلال للتدقيق اللغوي", url: "https://aljalal.com" }],
   creator: "الجلال",
   publisher: "منصة الجلال",
   robots: {
@@ -59,7 +59,7 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "ar_AR",
-    url: "https://almuhkam.com",
+    url: "https://aljalal.com",
     siteName: "منصة الجلال للتدقيق والتحرير",
     title: "الجلال — منصة التدقيق اللغوي والتحرير الأكاديمي",
     description: "نرتقي بنصوصكم إلى مستوى الإتقان اللغوي. خدمات تدقيق نحوي وإملائي وتحرير أكاديمي بأيدي نخبة من الخبراء.",
@@ -79,7 +79,7 @@ export const metadata = {
     images: ["/assets/almuhkam-paper-hero.jpg"],
   },
   alternates: {
-    canonical: "https://almuhkam.com",
+    canonical: "https://aljalal.com",
   },
   icons: {
     icon: [
@@ -98,9 +98,9 @@ export default function RootLayout({ children }) {
     "@type": "ProfessionalService",
     "name": "منصة الجلال للتدقيق اللغوي والتحرير الأكاديمي",
     "alternateName": "Al-Jalal Proofreading Platform",
-    "url": "https://almuhkam.com",
-    "logo": "https://almuhkam.com/assets/almuhkam-paper-hero.jpg",
-    "image": "https://almuhkam.com/assets/almuhkam-paper-hero.jpg",
+    "url": "https://aljalal.com",
+    "logo": "https://aljalal.com/assets/almuhkam-paper-hero.jpg",
+    "image": "https://aljalal.com/assets/almuhkam-paper-hero.jpg",
     "description": "منصة احترافية متخصصة في التدقيق اللغوي، المراجعة الأكاديمية لرسائل الماجستير والدكتوراه، وتحرير الكتب والمحتوى المؤسسي.",
     "telephone": "+967770334448",
     "email": "jalal611@gmail.com",

@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 
 export default async function sitemap() {
-  const baseUrl = "https://almuhkam.com";
+  const baseUrl = "https://aljalal.com";
 
   // Static core routes
   const staticRoutes = [
