@@ -1,0 +1,64 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("ADMIN") // ADMIN, EDITOR
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  tag         String   @default("كتابة أكاديمية")
+  excerpt     String
+  content     String
+  coverImage  String?
+  readTime    String   @default("٤ دقائق")
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  category    String   @default("أكاديمي")
+  beforeText  String
+  afterText   String
+  editsJson   String   // JSON string: [{ from: string, to: string, type: string }]
+  isFeatured  Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Inquiry {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  service     String   @default("تدقيق لغوي")
+  message     String
+  wordCount   Int?
+  status      String   @default("NEW") // NEW, IN_REVIEW, QUOTED, COMPLETED, ARCHIVED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}

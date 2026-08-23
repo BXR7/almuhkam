@@ -1,0 +1,410 @@
+/* ═══════════════════════════════════════════════════════════════
+   Inner Pages Shared Styles — Al-Jalal Redesign
+   Palette: Olive + Copper + Ivory
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Page Hero ─── */
+.pageHero {
+  padding: 180px 0 80px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+}
+
+.pageHero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 0%, rgba(13, 92, 70, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 100%, rgba(177, 132, 62, 0.02) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.pageHeroBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Breadcrumb ─── */
+.breadcrumb {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  list-style: none;
+  font-size: 0.85rem;
+  color: #79837c;
+  margin-bottom: 28px;
+}
+
+.breadcrumb a:hover {
+  color: #0d5c46;
+}
+
+.breadcrumbActive {
+  color: #0d5c46;
+  font-weight: 600;
+}
+
+/* ─── Page Title & Desc ─── */
+.pageTitle {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #0d5c46;
+  letter-spacing: -0.01em;
+}
+
+.pageDesc {
+  font-size: 1.1rem;
+  color: #5a6b63;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.9;
+  font-weight: 300;
+}
+
+/* ─── Sections ─── */
+.section {
+  padding: 100px 0;
+}
+
+/* ─── Content Wrapper ─── */
+.contentWrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: #5a6b63;
+  font-weight: 300;
+}
+
+.contentWrapper h2 {
+  color: #0d5c46;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 48px 0 20px;
+  padding-right: 18px;
+  border-right: 3px solid #b1843e;
+}
+
+.contentWrapper p {
+  margin-bottom: 22px;
+}
+
+/* ─── Feature List (Included) ─── */
+.featureList {
+  list-style: none;
+  margin: 28px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.featureItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px 20px;
+  background: #fffdf8;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  transition: border-color 0.3s ease;
+}
+
+.featureItem:hover {
+  border-color: rgba(13, 92, 70, 0.2);
+}
+
+.checkIcon {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border-radius: 50%;
+  background: rgba(13, 92, 70, 0.1);
+  color: #0d5c46;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-top: 3px;
+}
+
+/* ─── Exclusions List ─── */
+.notIncludedList {
+  list-style: none;
+  margin: 28px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 28px;
+  background: rgba(192, 57, 43, 0.03);
+  border: 1px solid rgba(192, 57, 43, 0.15);
+  border-radius: 16px;
+}
+
+.notIncludedItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.crossIcon {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border-radius: 50%;
+  background: rgba(192, 57, 43, 0.1);
+  color: #c0392b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-top: 3px;
+}
+
+/* ─── Forms ─── */
+.formWrapper {
+  background: #fffdf8;
+  border: 1px solid rgba(13, 92, 70, 0.12);
+  border-radius: 20px;
+  padding: 48px 40px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.05);
+}
+
+.progressContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 36px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.progressStep {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #79837c;
+}
+
+.progressActive {
+  color: #0d5c46;
+}
+
+.formGroup {
+  margin-bottom: 24px;
+}
+
+.formLabel {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1a1f1c;
+}
+
+.formInput,
+.formSelect,
+.formTextarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: #faf9f6;
+  border: 1px solid rgba(13, 92, 70, 0.15);
+  border-radius: 12px;
+  color: #1a1f1c;
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.formInput:focus,
+.formSelect:focus,
+.formTextarea:focus {
+  outline: none;
+  border-color: #0d5c46;
+  box-shadow: 0 0 0 3px rgba(13, 92, 70, 0.08);
+}
+
+/* ─── Upload Zone ─── */
+.uploadZone {
+  border: 2px dashed rgba(13, 92, 70, 0.2);
+  border-radius: 16px;
+  padding: 44px 30px;
+  text-align: center;
+  cursor: pointer;
+  background: rgba(250, 249, 246, 0.5);
+  transition: all 0.3s ease;
+}
+
+.uploadZone:hover {
+  border-color: #0d5c46;
+  background: rgba(13, 92, 70, 0.02);
+}
+
+.uploadIcon {
+  font-size: 2rem;
+  margin-bottom: 14px;
+  display: block;
+  color: #0d5c46;
+}
+
+.uploadText {
+  font-size: 0.92rem;
+  color: #5a6b63;
+  font-weight: 600;
+}
+
+.uploadSubtext {
+  font-size: 0.78rem;
+  color: #79837c;
+  margin-top: 6px;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 36px;
+}
+
+/* ─── Contact Grid ─── */
+.contactGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 48px;
+}
+
+.contactInfoCards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.infoCard {
+  background: #fffdf8;
+  border: 1px solid rgba(13, 92, 70, 0.1);
+  border-radius: 16px;
+  padding: 28px;
+}
+
+.infoCard h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #1a1f1c;
+}
+
+.infoCard h3 span {
+  color: #b1843e;
+}
+
+.infoCard p {
+  font-size: 0.92rem;
+  color: #5a6b63;
+  line-height: 1.8;
+}
+
+/* ─── FAQ ─── */
+.faqAccordion {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.faqItem {
+  background: #fffdf8;
+  border: 1px solid rgba(13, 92, 70, 0.1);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.faqItem:hover {
+  border-color: rgba(13, 92, 70, 0.2);
+}
+
+.faqQuestion {
+  width: 100%;
+  text-align: right;
+  padding: 22px 26px;
+  font-size: 1rem;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  color: #0d5c46;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faqQuestion:hover {
+  color: #b1843e;
+}
+
+.faqAnswer {
+  padding: 0 26px 22px;
+  font-size: 0.95rem;
+  color: #5a6b63;
+  line-height: 1.85;
+}
+
+/* ─── Sibling Services ─── */
+.siblingGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 56px;
+}
+
+.siblingCard {
+  border: 1px solid rgba(13, 92, 70, 0.1);
+  background: #fffdf8;
+  padding: 22px;
+  border-radius: 14px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.siblingCard:hover {
+  border-color: rgba(13, 92, 70, 0.25);
+  transform: translateY(-2px);
+}
+
+.siblingName {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #1a1f1c;
+}
+
+/* ─── Blog Grid ─── */
+.blogGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .contactGrid {
+    grid-template-columns: 1fr;
+  }
+  .formWrapper {
+    padding: 28px 20px;
+  }
+  .siblingGrid,
+  .blogGrid {
+    grid-template-columns: 1fr;
+  }
+}

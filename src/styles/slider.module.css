@@ -1,0 +1,199 @@
+/* ═══════════════════════════════════════════════════════════
+   SLIDER — Before/after text comparison card
+   ═══════════════════════════════════════════════════════════ */
+
+.sliderContainer {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ── Card ─────────────────────────────────────────────────── */
+
+.sliderCard {
+  background: #fffdf8;
+  border: 1px solid rgba(13, 92, 70, 0.12);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+
+.sliderHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(13, 92, 70, 0.1);
+}
+
+.title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #5a6b63;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+/* ── Tabs ─────────────────────────────────────────────────── */
+
+.tabs {
+  display: flex;
+  align-items: center;
+  background: #f3f1ec;
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.tab {
+  padding: 0.45rem 1.1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #79837c;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: color 0.25s ease,
+              background 0.25s ease,
+              box-shadow 0.25s ease;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: #5a6b63;
+}
+
+.activeTabBefore {
+  background: #c0392b;
+  color: white;
+  box-shadow: 0 2px 8px rgba(192, 57, 43, 0.25);
+}
+
+.activeTabBefore:hover {
+  color: white;
+}
+
+.activeTabAfter {
+  background: #0d5c46;
+  color: white;
+  box-shadow: 0 2px 8px rgba(13, 92, 70, 0.25);
+}
+
+.activeTabAfter:hover {
+  color: white;
+}
+
+/* ── Content ──────────────────────────────────────────────── */
+
+.content {
+  padding: 2rem 1.75rem;
+  direction: rtl;
+}
+
+.textOriginal,
+.textCorrected {
+  font-size: 1.15rem;
+  line-height: 2;
+  color: #1a1f1c;
+  margin: 0;
+  font-family: inherit;
+}
+
+/* ── Word highlights ──────────────────────────────────────── */
+
+.errorWord {
+  text-decoration: underline;
+  text-decoration-color: #c0392b;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  background: rgba(192, 57, 43, 0.1);
+  padding: 0.1em 0.25em;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.errorWord:hover {
+  background: rgba(192, 57, 43, 0.18);
+}
+
+.correctedWord {
+  text-decoration: underline;
+  text-decoration-color: #0d5c46;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  background: rgba(13, 92, 70, 0.1);
+  padding: 0.1em 0.25em;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.correctedWord:hover {
+  background: rgba(13, 92, 70, 0.18);
+}
+
+/* ── Legend ────────────────────────────────────────────────── */
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.85rem 1.5rem;
+  border-top: 1px solid rgba(13, 92, 70, 0.1);
+  direction: rtl;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  color: #79837c;
+  font-weight: 500;
+}
+
+.dotOriginal,
+.dotCorrected {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dotOriginal {
+  background: #c0392b;
+}
+
+.dotCorrected {
+  background: #0d5c46;
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .sliderContainer {
+    padding: 0 0.5rem;
+  }
+
+  .sliderHeader {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 1rem 1.25rem;
+  }
+
+  .content {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .textOriginal,
+  .textCorrected {
+    font-size: 1.05rem;
+  }
+
+  .legend {
+    gap: 1rem;
+    padding: 0.75rem 1.25rem;
+  }
+}
