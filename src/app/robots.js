@@ -5,6 +5,6 @@ export default function robots() {
       allow: "/",
       disallow: ["/admin/", "/admin/*", "/api/", "/_next/"],
     },
-    sitemap: "https://aljalal.com/sitemap.xml",
+    sitemap: `${process.env.NEXT_PUBLIC_SITE_URL || "https://aljalal.vercel.app"}/sitemap.xml`,
   };
 }

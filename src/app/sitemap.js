@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 
 export default async function sitemap() {
-  const baseUrl = "https://aljalal.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aljalal.vercel.app";
 
   // Static core routes
   const staticRoutes = [
