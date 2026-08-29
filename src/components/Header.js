@@ -81,8 +81,15 @@ export default function Header() {
           
           {/* Logo */}
           <Link href="/" className={styles.logo} onClick={closeAll}>
-            <span>الجلال</span>
-            <span style={{ fontSize: "1.2rem", opacity: 0.8 }}>✦</span>
+            <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.15 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                <span>الجلال</span>
+                <span style={{ fontSize: "1.05rem", opacity: 0.85, color: "var(--copper)" }}>✦</span>
+              </div>
+              <span style={{ fontSize: "0.68rem", fontWeight: "600", color: "var(--copper)", marginTop: "2px" }}>
+                التدقيق اللغوي المُحْكَم
+              </span>
+            </div>
           </Link>
 
           {/* Nav Links (Desktop) */}

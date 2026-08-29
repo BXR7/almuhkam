@@ -2,13 +2,13 @@ import Link from "next/link";
 import styles from "@/styles/footer.module.css";
 
 const servicesList = [
-  { title: "تدقيق الأبحاث والرسائل الجامعية", path: "/services/academic-proofreading" },
-  { title: "تحرير الكتب والمقالات", path: "/services/book-editing" },
-  { title: "الكتابة المؤسسية", path: "/services/corporate-writing" },
-  { title: "المحتوى التسويقي", path: "/services/content-marketing" },
-  { title: "التفريغ الصوتي", path: "/services/audio-transcription" },
-  { title: "خدمات الطلاب", path: "/services/student-services" },
-  { title: "المراجعة والنقد الأكاديمي", path: "/services/academic-review" }
+  { title: "التدقيق والتحرير اللغوي والتأليف", path: "/services/academic-proofreading" },
+  { title: "التواصل المؤسسي والكتابة المهنية", path: "/services/corporate-writing" },
+  { title: "الدعاية والإعلان وصناعة المحتوى", path: "/services/content-marketing" },
+  { title: "خدمات طلبة الجامعات والباحثين", path: "/services/student-services" },
+  { title: "تحرير الكتب والروايات", path: "/services/book-editing" },
+  { title: "المراجعة والنقد الأكاديمي", path: "/services/academic-review" },
+  { title: "التفريغ الصوتي", path: "/services/audio-transcription" }
 ];
 
 export default function Footer() {
@@ -18,7 +18,7 @@ export default function Footer() {
         <div className={styles.grid}>
           {/* Column 1: Services */}
           <div className={styles.column}>
-            <h3>خدماتنا</h3>
+            <h3>مجالات عملنا</h3>
             <ul className={styles.linkList}>
               {servicesList.map((service, index) => (
                 <li key={index}>
@@ -35,18 +35,22 @@ export default function Footer() {
             <h3>روابط سريعة</h3>
             <ul className={styles.linkList}>
               <li><Link href="/about" className={styles.linkItem}>من نحن</Link></li>
+              <li><Link href="/services" className={styles.linkItem}>كافة الخدمات</Link></li>
               <li><Link href="/methodology" className={styles.linkItem}>منهجيتنا</Link></li>
               <li><Link href="/portfolio" className={styles.linkItem}>نماذج أعمالنا</Link></li>
               <li><Link href="/faq" className={styles.linkItem}>الأسئلة الشائعة</Link></li>
               <li><Link href="/blog" className={styles.linkItem}>المدونة</Link></li>
               <li><Link href="/contact" className={styles.linkItem}>اتصل بنا</Link></li>
-              <li><a href="https://wa.me/967770334448?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%D8%8C%20%D8%A3%D9%88%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AE%D8%AF%D9%85%D8%A7%D8%AA%D9%83%D9%85%20%D8%A7%D9%84%D9%84%D8%BA%D9%88%D9%8A%D8%A9" target="_blank" rel="noopener noreferrer" className={styles.linkItem}>طلب عرض سعر</a></li>
+              <li><a href="https://wa.me/967770334448?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D9%85%D9%86%D8%B5%D8%A9%20%D8%A7%D9%84%D8%AC%D9%84%D8%A7%D9%84%D8%8C%20%D8%A3%D9%88%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AE%D8%AF%D9%85%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AA%D8%AF%D9%82%D9%8A%D9%82%20%D8%A7%D9%84%D9%84%D8%BA%D9%88%D9%8A%20%D8%A7%D9%84%D9%85%D9%8F%D8%AD%D9%92%D9%83%D9%8E%D9%85:" target="_blank" rel="noopener noreferrer" className={styles.linkItem}>طلب عرض سعر</a></li>
             </ul>
           </div>
 
           {/* Column 3: Contact */}
           <div className={styles.column}>
-            <h3>تواصل معنا</h3>
+            <h3>الجلال — التدقيق اللغوي المُحْكَم</h3>
+            <p style={{ color: "var(--copper-light)", fontSize: "0.88rem", marginBottom: "16px", lineHeight: "1.6" }}>
+              الدقة في اللغة... والإحكام في الصياغة. نمنح النصوص قوة لغوية ووضوحًا فكريًا وتأثيرًا يُحدث الفرق.
+            </p>
             <div className={styles.contactInfo}>
               <div className={styles.contactRow}>
                 <svg viewBox="0 0 24 24" width="18" height="18" stroke="var(--copper-light)" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
@@ -75,13 +79,13 @@ export default function Footer() {
         {/* Ethical commitment banner */}
         <div className={styles.ethicalBanner}>
           <p className={styles.ethicalText}>
-            ✦ نلتزم التزامًا مطلقًا: ندقق ونحرر ونرتقي بنصوصكم — لا نكتب نيابةً عنكم. أمانتكم العلمية خطنا الأحمر.
+            ✦ التزامنا بأخلاقيات البحث العلمي: لا نقدِّم خدمة كتابة البحوث أو الرسائل العلمية، وإنما نقتصر على التدقيق والتحرير والمراجعة والنقد الأكاديمي بما يحفظ أصالة العمل وملكية صاحبه.
           </p>
         </div>
 
         {/* Bottom copyright and legal links */}
         <div className={styles.bottom}>
-          <p>© ٢٠٢٦ الجلال. جميع الحقوق محفوظة.</p>
+          <p>© ٢٠٢٦ الجلال للتدقيق اللغوي المُحْكَم. جميع الحقوق محفوظة.</p>
           <div className={styles.legalLinks}>
             <Link href="/privacy" className={styles.legalLink}>سياسة الخصوصية</Link>
             <span>|</span>

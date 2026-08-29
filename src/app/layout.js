@@ -23,28 +23,28 @@ export const viewport = {
 };
 
 export const metadata = {
-  metadataBase: new URL('https://aljalal.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://aljalal.vercel.app'),
   title: {
-    default: "الجلال — منصة التدقيق اللغوي والتحرير الأكاديمي",
-    template: "%s | الجلال"
+    default: "الجلال — التدقيق اللغوي المُحْكَم | الدقة في اللغة... والإحكام في الصياغة",
+    template: "%s | الجلال للتدقيق اللغوي المُحْكَم"
   },
-  description: "الجلال هي المنصة العربية الرائدة للتدقيق اللغوي والتحرير الأكاديمي الاحترافي لرسائل الماجستير، أطروحات الدكتوراه، الكتب، والمحتوى المؤسسي بأعلى معايير الدقة والسرية.",
+  description: "الجلال — التدقيق اللغوي المُحْكَم. مُتخصصون في التدقيق والتحرير اللغوي وكتابة المحتوى الإبداعي والتسويقي والمعرفي وفق أعلى معايير الجودة لرسائل الماجستير والدكتوراه والكتب والمحتوى المؤسسي.",
   keywords: [
+    "الجلال للتدقيق اللغوي",
+    "التدقيق اللغوي المحكم",
     "تدقيق لغوي",
     "تحرير أكاديمي",
-    "تصحيح رسائل ماجستير",
-    "تصحيح رسائل دكتوراه",
-    "تدقيق نحوي وإملائي",
+    "تصحيح رسائل ماجستير ودكتوراه",
     "تحرير كتب وروايات",
-    "صياغة بحوث علمية",
-    "مراجعة نقدية للأبحاث",
-    "تدقيق لغوي اليمن",
+    "التواصل المؤسسي",
+    "صناعة محتوى تسويقي",
+    "تدقيق لغوي اليمن وصنعاء",
     "تدقيق لغوي السعودية والخليج",
-    "منصة الجلال"
+    "مراجعة نقدية للأبحاث"
   ],
-  authors: [{ name: "منصة الجلال للتدقيق اللغوي", url: "https://aljalal.com" }],
+  authors: [{ name: "منصة الجلال للتدقيق اللغوي المُحْكَم", url: "https://aljalal.vercel.app" }],
   creator: "الجلال",
-  publisher: "منصة الجلال",
+  publisher: "الجلال للتدقيق اللغوي المُحْكَم",
   robots: {
     index: true,
     follow: true,
@@ -59,27 +59,27 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "ar_AR",
-    url: "https://aljalal.com",
-    siteName: "منصة الجلال للتدقيق والتحرير",
-    title: "الجلال — منصة التدقيق اللغوي والتحرير الأكاديمي",
-    description: "نرتقي بنصوصكم إلى مستوى الإتقان اللغوي. خدمات تدقيق نحوي وإملائي وتحرير أكاديمي بأيدي نخبة من الخبراء.",
+    url: "https://aljalal.vercel.app",
+    siteName: "الجلال — التدقيق اللغوي المُحْكَم",
+    title: "الجلال — التدقيق اللغوي المُحْكَم | الدقة في اللغة... والإحكام في الصياغة",
+    description: "مُتخصصون في التدقيق والتحرير اللغوي وكتابة المحتوى الإبداعي والتسويقي والمعرفي. نمنح النصوص قوة لغوية ووضوحًا فكريًا وتأثيرًا يُحدث الفرق.",
     images: [
       {
         url: "/assets/almuhkam-paper-hero.jpg",
         width: 1200,
         height: 630,
-        alt: "منصة الجلال للتدقيق اللغوي والتحرير الأكاديمي",
+        alt: "الجلال — التدقيق اللغوي المُحْكَم",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "الجلال — منصة التدقيق اللغوي والتحرير الأكاديمي",
-    description: "خدمات تدقيق لغوي وتحرير أكاديمي احترافية للأبحاث والرسائل الجامعية والكتب.",
+    title: "الجلال — التدقيق اللغوي المُحْكَم | الدقة في اللغة... والإحكام في الصياغة",
+    description: "الدقة في اللغة... والإحكام في الصياغة. خدمات تدقيق نحوي وإملائي ومراجعة أكاديمية متخصصة.",
     images: ["/assets/almuhkam-paper-hero.jpg"],
   },
   alternates: {
-    canonical: "https://aljalal.com",
+    canonical: "https://aljalal.vercel.app",
   },
   icons: {
     icon: [
@@ -99,12 +99,13 @@ export default function RootLayout({ children }) {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    "name": "منصة الجلال للتدقيق اللغوي والتحرير الأكاديمي",
+    "name": "الجلال — التدقيق اللغوي المُحْكَم",
     "alternateName": "Al-Jalal Proofreading Platform",
-    "url": "https://aljalal.com",
-    "logo": "https://aljalal.com/assets/almuhkam-paper-hero.jpg",
-    "image": "https://aljalal.com/assets/almuhkam-paper-hero.jpg",
-    "description": "منصة احترافية متخصصة في التدقيق اللغوي، المراجعة الأكاديمية لرسائل الماجستير والدكتوراه، وتحرير الكتب والمحتوى المؤسسي.",
+    "slogan": "الدقة في اللغة... والإحكام في الصياغة",
+    "url": "https://aljalal.vercel.app",
+    "logo": "https://aljalal.vercel.app/assets/almuhkam-paper-hero.jpg",
+    "image": "https://aljalal.vercel.app/assets/almuhkam-paper-hero.jpg",
+    "description": "مُتخصصون في التدقيق والتحرير اللغوي وكتابة المحتوى الإبداعي والتسويقي والمعرفي وفق أعلى معايير الجودة للأبحاث والرسائل الجامعية والكتب والشركات.",
     "telephone": "+967770334448",
     "email": "jalal611@gmail.com",
     "address": {
@@ -117,14 +118,14 @@ export default function RootLayout({ children }) {
     "availableLanguage": ["Arabic"],
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "خدمات التدقيق اللغوي",
+      "name": "مجالات التدقيق اللغوي وصناعة المحتوى",
       "itemListElement": [
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "تدقيق الأبحاث والرسائل الجامعية" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "تحرير الكتب والمقالات" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "الكتابة المؤسسية والتقارير" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "المراجعة والنقد الأكاديمي" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "التفريغ الصوتي" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "خدمات الطلاب" } }
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "التدقيق والتحرير اللغوي والتأليف" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "التواصل المؤسسي والكتابة المهنية" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "الدعاية والإعلان وشبكات التواصل الاجتماعي" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "خدمات لطلبة الجامعات والباحثين" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "تحرير الكتب والروايات" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "المراجعة والنقد الأكاديمي" } }
       ]
     }
   };

@@ -32,7 +32,7 @@ export default function SettingsForm({ initialSettings = {} }) {
             name="site_name"
             type="text"
             required
-            defaultValue={initialSettings["site_name"] || "الجلال — منصة التدقيق اللغوي والتحرير الأكاديمي"}
+            defaultValue={initialSettings["site_name"] || "الجلال — التدقيق اللغوي المُحْكَم"}
             className={styles.input}
           />
         </div>

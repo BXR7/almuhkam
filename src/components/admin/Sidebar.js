@@ -55,6 +55,7 @@ export default function Sidebar({ user, pendingInquiriesCount = 0 }) {
           </div>
           <div>
             <div className={styles.brandTitle}>الجلال</div>
+            <div style={{ fontSize: "0.68rem", color: "#b1843e", fontWeight: "bold" }}>التدقيق اللغوي المُحْكَم</div>
           </div>
         </Link>
         <span className={styles.brandBadge}>لوحة الإدارة</span>

@@ -138,7 +138,7 @@ async function main() {
 
   // 4. Seed Default Settings
   const defaultSettings = [
-    { key: "site_name", value: "الجلال — منصة التدقيق اللغوي والتحرير الأكاديمي" },
+    { key: "site_name", value: "الجلال — التدقيق اللغوي المُحْكَم" },
     { key: "contact_email", value: "jalal611@gmail.com" },
     { key: "contact_phone", value: "+967 770 334 448" },
     { key: "whatsapp_number", value: "967770334448" },
