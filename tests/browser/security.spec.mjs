@@ -129,19 +129,19 @@ test('validly signed token for nonexistent session and legacy forged token are d
 
 test('account login throttle is persistent and rejects repeated failures', async ({ page }) => {
   await page.goto('/admin/login');
-  await page.locator('[name=email]').fill('missing-account@example.test');
-  await page.locator('[name=password]').fill('invalid-password');
-  for (let i = 0; i < 10; i++) {
+  const submit = page.locator('button[type=submit]').last();
+  for (let attempt = 1; attempt <= 11; attempt++) {
+    // A response can arrive before React commits the form reset. The old error
+    // remains visible between attempts, so it cannot signal a completed render.
+    await expect(submit).toBeEnabled();
     await page.locator('[name=email]').fill('missing-account@example.test');
     await page.locator('[name=password]').fill('invalid-password');
-    const response = page.waitForResponse(r => r.request().method() === 'POST');
-    await page.locator('button[type=submit]').last().click(); await response;
-    await expect(page.getByText('بيانات الدخول غير صحيحة.')).toBeVisible();
+    const response = page.waitForResponse(r => r.request().method() === 'POST' && r.url().includes('/admin/login'));
+    await submit.click(); await response;
+    await expect(submit).toBeEnabled();
+    await expect.poll(async () => (await db.query('SELECT count FROM app_private."RateLimit"')).rows[0]?.count).toBe(attempt);
+    await expect(page.getByText(attempt <= 10 ? 'بيانات الدخول غير صحيحة.' : 'يرجى المحاولة لاحقاً.')).toBeVisible();
   }
-  await page.locator('[name=email]').fill('missing-account@example.test');
-  await page.locator('[name=password]').fill('invalid-password');
-  await page.locator('button[type=submit]').last().click();
-  await expect(page.getByText('يرجى المحاولة لاحقاً.')).toBeVisible();
 });
 
 test('editor content CRUD works; current role and database expiry override a valid token', async ({ page }) => {

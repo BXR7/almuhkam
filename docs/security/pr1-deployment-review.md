@@ -34,3 +34,9 @@ Preview `DATABASE_URL` must reference an isolated database rehearsed with this m
 - Establish backup restore evidence, representative restored-schema rehearsal, protected row counts/digests, dependency inventory, drain/maintenance window, five-second lock timeout behavior and a tested compatibility rollback build. A local minimal fixture cannot establish these production properties. Schema relocation requires coordinated application cutover; do not deploy this PR against the unmigrated production database.
 
 [Supabase connections](https://supabase.com/docs/guides/database/connecting-to-postgres), [Supabase Prisma guidance](https://supabase.com/docs/guides/database/prisma). Every item above needs actual project evidence before production approval. No production DB access, migration, deployment, credential rotation or merge was performed.
+
+## Follow-up CI evidence
+
+Correction commit `581e224` passed PR run `38146256261` (seven browser tests, migration, build and audit). Its simultaneous push run `38146253159` failed only the repeated-login browser test: `page.waitForResponse: Test timeout of 60000ms exceeded` at the old line 137. Waiting for the response and an already-visible error did not wait for React's action transition/form reset; a subsequent fill could race that reset and leave required inputs empty, preventing the next POST. The test now waits for the pending submit button to become enabled before refilling and after each response, and checks each persisted throttle count. No retries, longer timeout or production rate-limit changes were added.
+
+Vercel's automatic Preview for that commit also failed: `Deployment has failed — run this Vercel CLI command: npx vercel inspect dpl_5wGbYNfxaezzqpVcCSqt49Di6bDL --logs`. Its underlying exception remains inaccessible; do not treat the browser-test race as the Vercel root cause.
