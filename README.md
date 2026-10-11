@@ -2,6 +2,8 @@
 
 Production security changes are documented in [the audit](docs/security/audit.md), [verification](docs/security/verification.md), and [approval-gated runbook](docs/security/runbook.md). Never apply database changes or rotate production credentials from a build job. Production database remediation and all six Supabase Advisor findings remain pending live verification and explicit execution approval.
 
+For secure Preview configuration, see [Preview environment steps](docs/security/preview-configuration.md). Production remains incompatible until the separately approved private-schema cutover.
+
 For a fresh isolated local rehearsal: start PostgreSQL 17 on loopback port 55439 with trust authentication **only for synthetic local testing**, then run:
 
 ```sh
@@ -9,7 +11,7 @@ npm ci
 npm run lint
 npm test
 node scripts/test-database.mjs
-node scripts/test-app-command.mjs npm run build
+node scripts/test-app-command.mjs --without-jwt-secret npm run build
 npx playwright install chromium
 npx playwright test
 npm audit --omit=dev

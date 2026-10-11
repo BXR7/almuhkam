@@ -8,6 +8,7 @@ const audience = "aljalal-admin";
 export function signingKey() {
   const secret = process.env.JWT_SECRET;
   if (!secret || new TextEncoder().encode(secret).length < 32 ||
+      secret.trim() !== secret || /^(.{1,16})\1+$/s.test(secret) ||
       secret === "aljalal_secret_key_2026_proofreading_platform_secure_token") {
     throw new Error("JWT_SECRET must be a new random secret of at least 32 bytes");
   }

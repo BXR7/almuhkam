@@ -6,12 +6,25 @@ import { signingKey, signSession, verifySession, SESSION_SECONDS } from "../src/
 import { allowed } from "../src/lib/permissions.js";
 import { validInquiry, validForm, validEdits, escapeHtml, validId } from "../src/lib/validation.js";
 
-test("secrets fail closed; known fallback is rejected", () => {
-  for (const value of [undefined, "short", "aljalal_secret_key_2026_proofreading_platform_secure_token"]) {
-    if (value) process.env.JWT_SECRET = value; else delete process.env.JWT_SECRET;
-    assert.throws(signingKey);
-  }
+test("production runtime rejects invalid secrets for both issuance and verification", async () => {
+  const previousMode = process.env.NODE_ENV;
+  process.env.NODE_ENV = "production";
   process.env.JWT_SECRET = randomBytes(48).toString("base64");
+  const validToken = await signSession("user", "session");
+  try {
+    for (const value of [undefined, "short", " ".repeat(48), "a".repeat(48), "change-me".repeat(8),
+      "aljalal_secret_key_2026_proofreading_platform_secure_token"]) {
+      if (value === undefined) delete process.env.JWT_SECRET; else process.env.JWT_SECRET = value;
+      assert.throws(signingKey, /JWT_SECRET/);
+      await assert.rejects(signSession("user", "session"), /JWT_SECRET/);
+      assert.equal(await verifySession(validToken), null);
+      // Config evaluation must work even in production mode without a valid key.
+      await import(`../next.config.mjs?invalid-key=${value === undefined ? "missing" : encodeURIComponent(value)}`);
+    }
+  } finally {
+    if (previousMode === undefined) delete process.env.NODE_ENV; else process.env.NODE_ENV = previousMode;
+    process.env.JWT_SECRET = randomBytes(48).toString("base64");
+  }
 });
 test("session JWT requires issuer, audience, subject, jti, lifetime and HS256", async () => {
   const token = await signSession("user", "session");

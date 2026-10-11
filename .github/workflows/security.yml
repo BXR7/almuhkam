@@ -24,7 +24,7 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: node scripts/test-database.mjs
-      - run: node scripts/test-app-command.mjs npm run build
+      - run: node scripts/test-app-command.mjs --without-jwt-secret npm run build
       - run: npx playwright install --with-deps chromium
       - run: npx playwright test
       - run: npm audit --omit=dev

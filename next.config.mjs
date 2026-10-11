@@ -1,5 +1,5 @@
-import { signingKey } from "./src/lib/token.js";
-if (process.env.NODE_ENV === "production") signingKey();
+// Signing keys are validated at runtime by every session signing/verification
+// operation. Loading build configuration must not require authentication secrets.
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
