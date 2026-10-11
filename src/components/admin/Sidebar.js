@@ -65,7 +65,7 @@ export default function Sidebar({ user, pendingInquiriesCount = 0 }) {
       <nav className={styles.sidebarNav}>
         <div className={styles.navSectionLabel}>القائمة الرئيسية</div>
 
-        {navItems.map((item) => {
+        {navItems.filter(item => user?.role === "ADMIN" || ["/admin/blog", "/admin/portfolio"].includes(item.href)).map((item) => {
           const Icon = item.icon;
           const isActive = item.exact
             ? pathname === item.href

@@ -1,3 +1,4 @@
+import { requirePermission } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import SettingsForm from "@/components/admin/SettingsForm";
 import styles from "@/styles/admin.module.css";
@@ -5,6 +6,7 @@ import styles from "@/styles/admin.module.css";
 export const dynamic = "force-dynamic";
 
 export default async function AdminSettingsPage() {
+  await requirePermission("settings");
   let settings = {};
   try {
     const settingsRecords = await prisma.setting.findMany();

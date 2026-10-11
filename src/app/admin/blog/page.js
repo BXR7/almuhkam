@@ -1,3 +1,4 @@
+import { requirePermission } from "@/lib/auth";
 import Link from "next/link";
 import { Plus, Edit3, Trash2, Eye, FileText } from "lucide-react";
 import prisma from "@/lib/prisma";
@@ -5,6 +6,7 @@ import { deletePostAction } from "@/lib/actions";
 import styles from "@/styles/admin.module.css";
 
 export default async function AdminBlogListPage() {
+  await requirePermission("content");
   const posts = await prisma.post.findMany({
     orderBy: { createdAt: "desc" },
   });

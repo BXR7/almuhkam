@@ -46,3 +46,7 @@ prisma/*.db-journal
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Browser test artifacts
+/test-results/
+/playwright-report/

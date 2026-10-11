@@ -1,10 +1,12 @@
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["app_private"]
 }
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 model User {
@@ -15,6 +17,8 @@ model User {
   role      String   @default("ADMIN") // ADMIN, EDITOR
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  sessions  Session[]
+  @@schema("app_private")
 }
 
 model Post {
@@ -29,6 +33,7 @@ model Post {
   isPublished Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  @@schema("app_private")
 }
 
 model Project {
@@ -42,6 +47,7 @@ model Project {
   order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  @@schema("app_private")
 }
 
 model Inquiry {
@@ -55,10 +61,31 @@ model Inquiry {
   status      String   @default("NEW") // NEW, IN_REVIEW, QUOTED, COMPLETED, ARCHIVED
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  @@schema("app_private")
 }
 
 model Setting {
   key       String   @id
   value     String
   updatedAt DateTime @updatedAt
+  @@schema("app_private")
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  @@index([userId])
+  @@index([expiresAt])
+  @@schema("app_private")
+}
+
+model RateLimit {
+  key       String   @id
+  count     Int
+  resetAt   DateTime
+  @@index([resetAt])
+  @@schema("app_private")
 }

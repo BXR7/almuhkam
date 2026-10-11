@@ -1,3 +1,4 @@
+import { escapeHtml } from "./validation";
 import nodemailer from "nodemailer";
 
 export async function sendInquiryNotificationEmail(inquiry) {
@@ -15,10 +16,14 @@ export async function sendInquiryNotificationEmail(inquiry) {
   }
 
   try {
-    const transporter = nodemailer.createTransporter({
+    const replyTo = inquiry.email;
+    inquiry = Object.fromEntries(Object.entries(inquiry).map(([key, value]) => [key, typeof value === "string" ? escapeHtml(value) : value]));
+    const transporter = nodemailer.createTransport({
       host,
       port,
       secure,
+      disableFileAccess: true,
+      disableUrlAccess: true,
       auth: {
         user,
         pass,
@@ -103,7 +108,7 @@ export async function sendInquiryNotificationEmail(inquiry) {
     const info = await transporter.sendMail({
       from: `"منصة الجلال" <${user}>`,
       to: toEmail,
-      replyTo: inquiry.email,
+      replyTo,
       subject: `📬 طلب تدقيق جديد: ${inquiry.service} — من (${inquiry.name})`,
       html: htmlContent,
     });
@@ -111,7 +116,7 @@ export async function sendInquiryNotificationEmail(inquiry) {
     console.log("✅ [Email Notification] Email sent successfully:", info.messageId);
     return { success: true, messageId: info.messageId };
   } catch (error) {
-    console.error("❌ [Email Notification] Error sending notification email:", error);
-    return { success: false, error: error.message };
+    console.error("Email notification failed");
+    return { success: false, reason: "delivery failed" };
   }
 }

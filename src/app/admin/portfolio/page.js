@@ -1,3 +1,4 @@
+import { requirePermission } from "@/lib/auth";
 import Link from "next/link";
 import { Plus, Edit3, Trash2, Eye, Briefcase } from "lucide-react";
 import prisma from "@/lib/prisma";
@@ -5,6 +6,7 @@ import { deleteProjectAction } from "@/lib/actions";
 import styles from "@/styles/admin.module.css";
 
 export default async function AdminPortfolioListPage() {
+  await requirePermission("content");
   const projects = await prisma.project.findMany({
     orderBy: { order: "asc" },
   });

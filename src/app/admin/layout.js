@@ -20,7 +20,7 @@ export default async function AdminLayout({ children }) {
   // Count pending (NEW) inquiries for the sidebar badge
   let pendingCount = 0;
   try {
-    pendingCount = await prisma.inquiry.count({
+    if (session.role === "ADMIN") pendingCount = await prisma.inquiry.count({
       where: { status: "NEW" },
     });
   } catch (err) {

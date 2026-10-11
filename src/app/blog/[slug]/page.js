@@ -10,7 +10,7 @@ export async function generateMetadata({ params }) {
   let post = null;
   try {
     post = await prisma.post.findUnique({
-      where: { slug: decodedSlug },
+      where: { slug: decodedSlug, isPublished: true },
     });
   } catch (e) {
     post = null;
@@ -29,7 +29,7 @@ export default async function BlogPostPage({ params }) {
   let post = null;
   try {
     post = await prisma.post.findUnique({
-      where: { slug: decodedSlug },
+      where: { slug: decodedSlug, isPublished: true },
     });
   } catch (e) {
     post = null;

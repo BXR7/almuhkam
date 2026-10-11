@@ -1,3 +1,4 @@
+import { requirePermission } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, Eye } from "lucide-react";
@@ -7,6 +8,7 @@ import { updateProjectAction } from "@/lib/actions";
 import styles from "@/styles/admin.module.css";
 
 export default async function EditPortfolioProjectPage({ params }) {
+  await requirePermission("content");
   const { id } = await params;
   const project = await prisma.project.findUnique({
     where: { id },
