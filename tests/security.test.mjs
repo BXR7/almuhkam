@@ -64,3 +64,9 @@ test("inquiry and content validation rejects malformed and oversized inputs", ()
   assert.ok(validId("cm123")); assert.ok(!validId("../admin"));
   const form = new FormData(); form.set("message", "x".repeat(100001)); assert.ok(!validForm(form));
 });
+test("notification email template derives dashboard link from environment site URL without hardcoded localhost", async () => {
+  const { readFile } = await import("node:fs/promises");
+  const mailSource = await readFile(new URL("../src/lib/mail.js", import.meta.url), "utf8");
+  assert.ok(!mailSource.includes("http://localhost:3000/admin/inquiries"), "localhost must not be hardcoded in mail templates");
+  assert.ok(mailSource.includes("NEXT_PUBLIC_SITE_URL"), "mail template must support configured environment site URL");
+});

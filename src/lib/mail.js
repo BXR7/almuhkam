@@ -30,6 +30,7 @@ export async function sendInquiryNotificationEmail(inquiry) {
       },
     });
 
+    const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || "https://aljalal.vercel.app").replace(/\/$/, "");
     const whatsappUrl = inquiry.phone
       ? `https://wa.me/${inquiry.phone.replace(/[^0-9]/g, "")}`
       : null;
@@ -92,7 +93,7 @@ export async function sendInquiryNotificationEmail(inquiry) {
               محادثة العميل عبر واتساب 💬
             </a>
             ` : ''}
-            <a href="http://localhost:3000/admin/inquiries" class="btn btn-dashboard" target="_blank">
+            <a href="${baseUrl}/admin/inquiries" class="btn btn-dashboard" target="_blank">
               فتح لوحة التحكم ⚙️
             </a>
           </div>
