@@ -13,6 +13,16 @@ DO $$ BEGIN
     RAISE EXCEPTION 'Runtime inherits public CREATE: review shared schema privileges before proceeding';
   END IF;
 END $$;
+-- The trusted migration operator needs owner membership; Supabase postgres is
+-- not a superuser. PostgreSQL 16+ creator membership does not imply SET/INHERIT.
+-- Never grant this membership to the runtime or Data API roles.
+DO $$ BEGIN
+  IF current_setting('server_version_num')::int >= 160000 THEN
+    EXECUTE format('GRANT aljalal_owner TO %I WITH INHERIT TRUE, SET TRUE', current_user);
+  ELSE
+    EXECUTE format('GRANT aljalal_owner TO %I', current_user);
+  END IF;
+END $$;
 CREATE SCHEMA app_private AUTHORIZATION aljalal_owner;
 REVOKE ALL ON SCHEMA app_private FROM PUBLIC;
 GRANT USAGE ON SCHEMA app_private TO aljalal_runtime;

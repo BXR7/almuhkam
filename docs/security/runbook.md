@@ -2,6 +2,8 @@
 
 This PR does not authorize execution of the production procedure. No automatic migrations are wired to npm build/start or CI. Versioned SQL in `security/migrations` is applied manually through a reviewed operator session; Prisma schema tracks the resulting mappings. Do not run prisma db push, migrate reset, destructive diff-generated migrations or seed scripts against production. Existing production has no committed Prisma migration history; do not invent/baseline that history without schema introspection and a separate reviewed migration plan. `security/test-baseline.sql` is ONLY an isolated fixture matching the original repository, never a production migration.
 
+See [PR #1 deployment and compatibility review](pr1-deployment-review.md) for the restricted-operator correction and unresolved provider/pooler assumptions. The migration grants its executing trusted operator owner membership; review that identity before execution. FORCE RLS still restricts non-BYPASS operators: ownership alone does not authorize provisioning or reading row digests.
+
 ## Evidence gate: read only
 
 1. Confirm the target project ID/name is `aljalal-db` and obtain a scoped operator connection through the approved secret manager. Never paste its URL, JWT, account hashes or inquiry rows into PR/logs. Record who owns the approval and the incident window.

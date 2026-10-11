@@ -8,12 +8,15 @@ const port = process.env.TEST_PG_PORT || "55439";
 if (!/^[0-9]{4,5}$/.test(port)) throw new Error("Invalid local test port");
 const admin = new pg.Client({ connectionString: `postgresql://postgres@127.0.0.1:${port}/postgres` });
 await admin.connect();
-await admin.query("CREATE DATABASE aljalal_security_test");
+await admin.query("CREATE ROLE migration_operator LOGIN CREATEROLE CREATEDB NOSUPERUSER NOBYPASSRLS");
+await admin.query("CREATE DATABASE aljalal_security_test OWNER migration_operator");
 await admin.end();
 const db = new pg.Client({ connectionString: `postgresql://postgres@127.0.0.1:${port}/aljalal_security_test` });
 await db.connect();
+const operator = new pg.Client({ connectionString: `postgresql://migration_operator@127.0.0.1:${port}/aljalal_security_test` });
+await operator.connect();
 try {
-  await db.query(await readFile("security/test-baseline.sql", "utf8"));
+  await operator.query(await readFile("security/test-baseline.sql", "utf8"));
   await db.query("CREATE ROLE anon NOLOGIN; CREATE ROLE authenticated NOLOGIN; CREATE ROLE service_role NOLOGIN BYPASSRLS");
   await db.query('GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role; GRANT ALL ON ALL TABLES IN SCHEMA public TO anon, authenticated, service_role; GRANT SELECT (email) ON public."User" TO anon');
   const password = randomBytes(24).toString("base64");
@@ -32,7 +35,9 @@ try {
     return result;
   }
   const before = await fingerprint("public");
-  await db.query(await readFile("security/migrations/001_private_schema.sql", "utf8"));
+  await operator.query(await readFile("security/migrations/001_private_schema.sql", "utf8"));
+  assert.equal((await operator.query("SELECT rolsuper FROM pg_roles WHERE rolname=current_user")).rows[0].rolsuper, false);
+  assert.equal((await db.query("SELECT pg_has_role('aljalal_app','aljalal_owner','MEMBER') AS allowed")).rows[0].allowed, false);
   assert.deepEqual(await fingerprint("app_private"), before);
   await db.query(await readFile("security/verify.sql", "utf8"));
   await db.query("ALTER ROLE aljalal_app LOGIN");
@@ -58,6 +63,9 @@ try {
   await db.query('ROLLBACK');
   // Exercise the rollback inside a transaction, then restore the tested forward state.
   const rollback = (await readFile("security/rollback/001_private_schema.sql", "utf8")).replace(/^BEGIN;$/m, '').replace(/^COMMIT;$/m, '');
+  await operator.query('BEGIN'); await operator.query(rollback);
+  assert.equal((await operator.query("SELECT count(*)::int n FROM pg_tables WHERE schemaname='public' AND tablename=ANY($1)", [tables])).rows[0].n, tables.length);
+  await operator.query('ROLLBACK');
   await db.query('BEGIN'); await db.query(rollback);
   assert.deepEqual(await fingerprint("public"), before);
   await db.query('SET LOCAL ROLE anon');
@@ -68,4 +76,4 @@ try {
   const config = { DATABASE_URL: `postgresql://aljalal_app@127.0.0.1:${port}/aljalal_security_test`, JWT_SECRET: randomBytes(48).toString("base64"), TEST_PASSWORD: password };
   await writeFile('/tmp/aljalal-test-config.json', JSON.stringify(config), { mode: 0o600 });
   console.log('PASS: forward migration, original row counts/digests, anon/authenticated/service_role denial, runtime least privilege, future-table defaults, rollback integrity and denial');
-} finally { await db.end(); }
+} finally { await operator.end(); await db.end(); }
