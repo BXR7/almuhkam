@@ -1,9 +1,13 @@
+import { redirect } from "next/navigation";
+import { requirePermission } from "@/lib/auth";
 import Link from "next/link";
 import { FileText, Briefcase, Inbox, Plus, ArrowLeft, Clock, Phone, MessageSquare } from "lucide-react";
 import prisma from "@/lib/prisma";
 import styles from "@/styles/admin.module.css";
 
 export default async function AdminDashboardOverview() {
+  const user = await requirePermission("content");
+  if (user.role === "EDITOR") redirect("/admin/blog");
   let postsCount = 0;
   let projectsCount = 0;
   let inquiriesCount = 0;

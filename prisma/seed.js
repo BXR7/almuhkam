@@ -1,32 +1,11 @@
 const { PrismaClient } = require("@prisma/client");
-const bcrypt = require("bcryptjs");
 
 const prisma = new PrismaClient();
 
 async function main() {
   console.log("🌱 Starting database seeding for Al-Jalal Platform...");
 
-  // 1. Seed Admin User
-  const adminEmail = "admin@aljalal.com";
-  const existingAdmin = await prisma.user.findUnique({
-    where: { email: adminEmail },
-  });
-
-  if (!existingAdmin) {
-    const hashedPassword = await bcrypt.hash("aljalal2026", 10);
-    const admin = await prisma.user.create({
-      data: {
-        name: "مدير المنصة",
-        email: adminEmail,
-        password: hashedPassword,
-        role: "ADMIN",
-      },
-    });
-    console.log(`✅ Admin user created: ${admin.email} (Password: aljalal2026)`);
-  } else {
-    console.log(`ℹ️ Admin user already exists: ${adminEmail}`);
-  }
-
+  // Administrator provisioning is a separate, explicit operation; never seed credentials.
   // 2. Seed Initial Blog Posts
   const initialPosts = [
     {
@@ -148,7 +127,7 @@ async function main() {
   for (const setting of defaultSettings) {
     await prisma.setting.upsert({
       where: { key: setting.key },
-      update: { value: setting.value },
+      update: {},
       create: setting,
     });
   }
@@ -159,7 +138,7 @@ async function main() {
 
 main()
   .catch((e) => {
-    console.error("❌ Seeding failed:", e);
+    console.error("Seeding failed");
     process.exit(1);
   })
   .finally(async () => {

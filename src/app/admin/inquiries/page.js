@@ -1,3 +1,4 @@
+import { requirePermission } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import InquiriesTable from "@/components/admin/InquiriesTable";
 import styles from "@/styles/admin.module.css";
@@ -5,6 +6,7 @@ import styles from "@/styles/admin.module.css";
 export const dynamic = "force-dynamic";
 
 export default async function AdminInquiriesPage() {
+  await requirePermission("inquiries");
   let inquiries = [];
   try {
     inquiries = await prisma.inquiry.findMany({

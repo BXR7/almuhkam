@@ -1,3 +1,4 @@
+import { requirePermission } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, Save, Eye } from "lucide-react";
@@ -6,6 +7,7 @@ import { updatePostAction } from "@/lib/actions";
 import styles from "@/styles/admin.module.css";
 
 export default async function EditBlogPostPage({ params }) {
+  await requirePermission("content");
   const { id } = await params;
   const post = await prisma.post.findUnique({
     where: { id },

@@ -11,6 +11,7 @@ export default async function Portfolio() {
   let projects = [];
   try {
     projects = await prisma.project.findMany({
+      where: { isFeatured: true },
       orderBy: { order: "asc" },
     });
   } catch (e) {

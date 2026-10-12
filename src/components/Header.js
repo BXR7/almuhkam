@@ -74,6 +74,9 @@ export default function Header() {
     setIsMegaOpen(false);
   };
 
+  // The public fixed header must not cover the administrative logout control.
+  if (pathname.startsWith("/admin")) return null;
+
   return (
     <>
       <header className={`${styles.header} ${isScrolled ? styles.scrolled : styles.notScrolled}`}>

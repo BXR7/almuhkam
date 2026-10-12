@@ -4,36 +4,39 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
-import { createSession, deleteSession, getSession } from "@/lib/auth";
+import { createSession, deleteSession, requirePermission } from "@/lib/auth";
+import { allowed } from "@/lib/permissions";
+import { consumeLimit } from "@/lib/rate-limit";
+import { validInquiry, validForm, validId, validEdits } from "@/lib/validation";
 import { sendInquiryNotificationEmail } from "@/lib/mail";
 
 /* ─── 1. Authentication Actions ─── */
 
+const dummyPasswordHash = bcrypt.hash("non-account timing equalizer", 12);
+
 export async function loginAction(prevState, formData) {
+  if (!validForm(formData)) return { error: "بيانات الدخول غير صحيحة." };
   const email = formData.get("email")?.toString().trim();
   const password = formData.get("password")?.toString();
 
-  if (!email || !password) {
+  if (!email || email.length > 254 || !password || Buffer.byteLength(password) > 72) {
     return { error: "يرجى إدخال البريد الإلكتروني وكلمة المرور." };
   }
 
   try {
+    if (!await consumeLimit("login", email.toLowerCase(), 10, 900)) return { error: "يرجى المحاولة لاحقاً." };
     const user = await prisma.user.findUnique({
       where: { email },
     });
 
-    if (!user) {
-      return { error: "بيانات الدخول غير صحيحة." };
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    const isMatch = await bcrypt.compare(password, user?.password ?? await dummyPasswordHash);
+    if (!user || !isMatch || !allowed(user.role, "content")) {
       return { error: "بيانات الدخول غير صحيحة." };
     }
 
     await createSession(user);
   } catch (error) {
-    console.error("Login error:", error);
+    console.error("Login error:");
     return { error: "حدث خطأ أثناء محاولة تسجيل الدخول." };
   }
 
@@ -48,9 +51,9 @@ export async function logoutAction() {
 /* ─── 2. Blog Post Actions ─── */
 
 export async function createPostAction(prevState, formData) {
-  const session = await getSession();
-  if (!session) redirect("/admin/login");
+  await requirePermission("content");
 
+  if (!validForm(formData)) return { error: "بيانات غير صالحة." };
   const title = formData.get("title")?.toString().trim();
   let slug = formData.get("slug")?.toString().trim();
   const tag = formData.get("tag")?.toString().trim() || "كتابة أكاديمية";
@@ -89,7 +92,7 @@ export async function createPostAction(prevState, formData) {
     revalidatePath(`/blog/${slug}`);
     revalidatePath("/admin/blog");
   } catch (error) {
-    console.error("Create post error:", error);
+    console.error("Create post error:");
     return { error: "فشل في إضافة المقال، يرجى المحاولة لاحقاً." };
   }
 
@@ -97,14 +100,15 @@ export async function createPostAction(prevState, formData) {
 }
 
 export async function updatePostAction(id, arg1, arg2) {
-  const session = await getSession();
-  if (!session) redirect("/admin/login");
+  await requirePermission("content");
+  if (!validId(id)) return { error: "بيانات غير صالحة." };
 
   const formData = arg2 instanceof FormData ? arg2 : arg1 instanceof FormData ? arg1 : null;
   if (!formData) {
     return { error: "لم يتم استقبال بيانات النموذج بشكل صحيح." };
   }
 
+  if (!validForm(formData)) return { error: "بيانات غير صالحة." };
   const title = formData.get("title")?.toString().trim();
   const slug = formData.get("slug")?.toString().trim();
   const tag = formData.get("tag")?.toString().trim();
@@ -135,7 +139,7 @@ export async function updatePostAction(id, arg1, arg2) {
     revalidatePath(`/blog/${slug}`);
     revalidatePath("/admin/blog");
   } catch (error) {
-    console.error("Update post error:", error);
+    console.error("Update post error:");
     return { error: "فشل في تحديث المقال." };
   }
 
@@ -143,8 +147,8 @@ export async function updatePostAction(id, arg1, arg2) {
 }
 
 export async function deletePostAction(id) {
-  const session = await getSession();
-  if (!session) redirect("/admin/login");
+  await requirePermission("content");
+  if (!validId(id)) return { error: "بيانات غير صالحة." };
 
   try {
     await prisma.post.delete({ where: { id } });
@@ -152,7 +156,7 @@ export async function deletePostAction(id) {
     revalidatePath("/admin/blog");
     return { success: true };
   } catch (error) {
-    console.error("Delete post error:", error);
+    console.error("Delete post error:");
     return { error: "فشل حذف المقال." };
   }
 }
@@ -160,16 +164,16 @@ export async function deletePostAction(id) {
 /* ─── 3. Portfolio Project Actions ─── */
 
 export async function createProjectAction(prevState, formData) {
-  const session = await getSession();
-  if (!session) redirect("/admin/login");
+  await requirePermission("content");
 
+  if (!validForm(formData)) return { error: "بيانات غير صالحة." };
   const title = formData.get("title")?.toString().trim();
   const category = formData.get("category")?.toString().trim() || "أكاديمي";
   const beforeText = formData.get("beforeText")?.toString().trim();
   const afterText = formData.get("afterText")?.toString().trim();
   const editsJson = formData.get("editsJson")?.toString().trim() || "[]";
 
-  if (!title || !beforeText || !afterText) {
+  if (!title || !beforeText || !afterText || !validEdits(editsJson)) {
     return { error: "يرجى تعبئة العنوان والنص قبل وبعد التدقيق." };
   }
 
@@ -187,7 +191,7 @@ export async function createProjectAction(prevState, formData) {
     revalidatePath("/portfolio");
     revalidatePath("/admin/portfolio");
   } catch (error) {
-    console.error("Create project error:", error);
+    console.error("Create project error:");
     return { error: "فشل إضافة نموذج العمل." };
   }
 
@@ -195,21 +199,22 @@ export async function createProjectAction(prevState, formData) {
 }
 
 export async function updateProjectAction(id, arg1, arg2) {
-  const session = await getSession();
-  if (!session) redirect("/admin/login");
+  await requirePermission("content");
+  if (!validId(id)) return { error: "بيانات غير صالحة." };
 
   const formData = arg2 instanceof FormData ? arg2 : arg1 instanceof FormData ? arg1 : null;
   if (!formData) {
     return { error: "لم يتم استقبال بيانات النموذج بشكل صحيح." };
   }
 
+  if (!validForm(formData)) return { error: "بيانات غير صالحة." };
   const title = formData.get("title")?.toString().trim();
   const category = formData.get("category")?.toString().trim();
   const beforeText = formData.get("beforeText")?.toString().trim();
   const afterText = formData.get("afterText")?.toString().trim();
   const editsJson = formData.get("editsJson")?.toString().trim() || "[]";
 
-  if (!title || !beforeText || !afterText) {
+  if (!title || !beforeText || !afterText || !validEdits(editsJson)) {
     return { error: "يرجى تعبئة العنوان والنص قبل وبعد التدقيق." };
   }
 
@@ -228,7 +233,7 @@ export async function updateProjectAction(id, arg1, arg2) {
     revalidatePath("/portfolio");
     revalidatePath("/admin/portfolio");
   } catch (error) {
-    console.error("Update project error:", error);
+    console.error("Update project error:");
     return { error: "فشل تحديث نموذج العمل." };
   }
 
@@ -236,8 +241,8 @@ export async function updateProjectAction(id, arg1, arg2) {
 }
 
 export async function deleteProjectAction(id) {
-  const session = await getSession();
-  if (!session) redirect("/admin/login");
+  await requirePermission("content");
+  if (!validId(id)) return { error: "بيانات غير صالحة." };
 
   try {
     await prisma.project.delete({ where: { id } });
@@ -245,7 +250,7 @@ export async function deleteProjectAction(id) {
     revalidatePath("/admin/portfolio");
     return { success: true };
   } catch (error) {
-    console.error("Delete project error:", error);
+    console.error("Delete project error:");
     return { error: "فشل حذف النموذج." };
   }
 }
@@ -253,17 +258,19 @@ export async function deleteProjectAction(id) {
 /* ─── 4. Inquiry Actions ─── */
 
 export async function submitContactInquiryAction(prevState, formData) {
+  if (!validForm(formData)) return { error: "بيانات غير صالحة." };
   const name = formData.get("name")?.toString().trim();
   const email = formData.get("email")?.toString().trim();
   const phone = formData.get("phone")?.toString().trim() || null;
   const service = formData.get("service")?.toString().trim() || "تدقيق لغوي عام";
   const message = formData.get("message")?.toString().trim();
 
-  if (!name || !email || !message) {
+  if (!validInquiry({ name, email, phone, service, message })) {
     return { error: "يرجى تعبئة جميع الحقول المطلوبة (الاسم، البريد، الرسالة)." };
   }
 
   try {
+    if (!await consumeLimit("contact", email.toLowerCase(), 5, 3600)) return { error: "يرجى المحاولة لاحقاً." };
     const inquiry = await prisma.inquiry.create({
       data: {
         name,
@@ -277,22 +284,22 @@ export async function submitContactInquiryAction(prevState, formData) {
 
     // Send email notification in background
     sendInquiryNotificationEmail(inquiry).catch((err) => {
-      console.error("Background email send error:", err);
+      console.error("Background email send error:");
     });
 
     revalidatePath("/admin/inquiries");
     revalidatePath("/admin");
     return { success: true, message: "تم استلام رسالتك بنجاح! سيتواصل معك خبيرنا اللغوي قريباً." };
   } catch (error) {
-    console.error("Submit inquiry error:", error);
+    console.error("Submit inquiry error:");
     return { error: "حدث خطأ أثناء إرسال طلبك. يرجى المحاولة مجدداً أو التواصل عبر واتساب مباشرة." };
   }
 }
 
 export async function updateInquiryStatusAction(id, newStatus) {
-  const session = await getSession();
-  if (!session) redirect("/admin/login");
+  await requirePermission("inquiries");
 
+  if (!["NEW", "IN_REVIEW", "QUOTED", "COMPLETED", "ARCHIVED"].includes(newStatus) || !validId(id)) return { error: "بيانات غير صالحة." };
   try {
     await prisma.inquiry.update({
       where: { id },
@@ -302,14 +309,14 @@ export async function updateInquiryStatusAction(id, newStatus) {
     revalidatePath("/admin");
     return { success: true };
   } catch (error) {
-    console.error("Update inquiry error:", error);
+    console.error("Update inquiry error:");
     return { error: "فشل تحديث حالة الطلب." };
   }
 }
 
 export async function deleteInquiryAction(id) {
-  const session = await getSession();
-  if (!session) redirect("/admin/login");
+  await requirePermission("inquiries");
+  if (!validId(id)) return { error: "بيانات غير صالحة." };
 
   try {
     await prisma.inquiry.delete({ where: { id } });
@@ -317,7 +324,7 @@ export async function deleteInquiryAction(id) {
     revalidatePath("/admin");
     return { success: true };
   } catch (error) {
-    console.error("Delete inquiry error:", error);
+    console.error("Delete inquiry error:");
     return { error: "فشل حذف الطلب." };
   }
 }
@@ -325,14 +332,14 @@ export async function deleteInquiryAction(id) {
 /* ─── 5. Settings Action ─── */
 
 export async function updateSettingsAction(arg1, arg2) {
-  const session = await getSession();
-  if (!session) redirect("/admin/login");
+  await requirePermission("settings");
 
   const formData = arg2 instanceof FormData ? arg2 : arg1 instanceof FormData ? arg1 : null;
   if (!formData) {
     return { error: "لم يتم استقبال بيانات النموذج بشكل صحيح." };
   }
 
+  if (!validForm(formData)) return { error: "بيانات غير صالحة." };
   try {
     const keys = ["site_name", "contact_email", "contact_phone", "whatsapp_number", "address"];
     for (const key of keys) {
@@ -351,7 +358,7 @@ export async function updateSettingsAction(arg1, arg2) {
     revalidatePath("/admin/settings");
     return { success: true, message: "تم حفظ وتحديث الإعدادات بنجاح!" };
   } catch (error) {
-    console.error("Settings update error:", error);
+    console.error("Settings update error:");
     return { error: "فشل حفظ الإعدادات في قاعدة البيانات." };
   }
 }

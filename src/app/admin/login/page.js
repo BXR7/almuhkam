@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import { Lock, Mail, ShieldCheck, ArrowLeft } from "lucide-react";
 import { loginAction } from "@/lib/actions";
@@ -73,10 +74,10 @@ export default function AdminLoginPage() {
         </form>
 
         <div style={{ marginTop: "24px", textAlign: "center", borderTop: "1px solid rgba(13, 92, 70, 0.1)", paddingTop: "16px" }}>
-          <a href="/" style={{ fontSize: "0.82rem", color: "#5a6b63", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px" }}>
+          <Link href="/" style={{ fontSize: "0.82rem", color: "#5a6b63", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px" }}>
             <ArrowLeft size={14} />
             <span>العودة للموقع الرئيسي</span>
-          </a>
+          </Link>
         </div>
       </div>
     </div>

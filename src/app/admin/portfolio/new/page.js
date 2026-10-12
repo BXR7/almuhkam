@@ -1,10 +1,12 @@
+import { requirePermission } from "@/lib/auth";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ProjectForm from "@/components/admin/ProjectForm";
 import { createProjectAction } from "@/lib/actions";
 import styles from "@/styles/admin.module.css";
 
-export default function NewPortfolioProjectPage() {
+export default async function NewPortfolioProjectPage() {
+  await requirePermission("content");
   return (
     <div>
       <div className={styles.pageHeading}>
